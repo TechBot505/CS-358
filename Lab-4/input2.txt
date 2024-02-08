@@ -1,0 +1,10 @@
+#include <iostream>
+
+int main() {
+    printf("Hello World");
+    printf("Hello World");
+    printf("Hello World");
+    scanf(“%d”, &var);
+    return 0;
+}
+

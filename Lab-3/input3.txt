@@ -1,0 +1,5 @@
+// Hi, I am a single-line comment 
+
+/*  
+Hi, I am a multi-line comment
+*/

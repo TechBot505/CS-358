@@ -1,29 +1,28 @@
 %{
-int comment_count = 0;
-%}
-
-%x COMMENT MULTI_LINE_COMMENT SINGLE_LINE_COMMENT
+#include<stdio.h>
+int single_line_comment = 0;
+int multiple_line_comment = 0;
+%}          
 
 %%
+"//".* {printf("Single line comment: %s\n", yytext); single_line_comment++;}
+"/*"([^*]|[*][^/])*"*/" {printf("Multi line comment : %s\n", yytext); multiple_line_comment++;}
 
-"/*"    { comment_count++; BEGIN(MULTI_LINE_COMMENT); }
-"//"    { comment_count++; BEGIN(SINGLE_LINE_COMMENT); }
-
-<INITIAL><<EOF>>    { /* End of file */ }
-
-<INITIAL>.|\n       { /* Ignore other characters in the main state */ }
-
-<COMMENT>"*/"       { BEGIN(INITIAL); }
-<COMMENT>[^*\n]+    { /* Ignore characters within a multi-line comment */ }
-<COMMENT>"*"+[^*/\n] { /* Ignore characters within a multi-line comment */ }
-
-<SINGLE_LINE_COMMENT>\n  { BEGIN(INITIAL); }
-<SINGLE_LINE_COMMENT>.   { /* Ignore characters within a single-line comment */ }
-
+. { } // Discard any other characters
+\n  // Discard newline characters
 %%
 
 int main() {
+    FILE *fp;
+    fp = fopen("input3.txt", "r");
+    if (fp == NULL) {
+        printf("Couldn't open file");
+        return 0;
+    }
+    yyin = fp;
     yylex();
-    printf("Number of comments: %d\n", comment_count);
+    printf("Single line comments: %d\n", single_line_comment);
+    printf("Multiple line comments: %d\n", multiple_line_comment);
+    fclose(fp);
     return 0;
 }

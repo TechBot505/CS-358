@@ -1,14 +1,16 @@
 %{
 #include <stdio.h>
+int temp = 2;
 %}
 
 %%
 [a-zA-Z]    {
-                int shift = 2 + (yytext[0] - 'a');
+                int shift = temp + (yytext[0] - 'a');
                 if (shift > 25) {
                     shift = shift % 26;
                 }
                 char replacedChar = 'a' + shift - 1;
+                temp++;
                 printf("%c", replacedChar);
             }
 .           printf("%s", yytext);
